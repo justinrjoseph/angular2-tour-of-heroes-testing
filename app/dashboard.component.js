@@ -11,28 +11,30 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var router_deprecated_1 = require('@angular/router-deprecated');
 var hero_service_1 = require('./hero.service');
-var HeroDetailComponent = (function () {
-    function HeroDetailComponent(_heroService, _routeParams) {
+var DashboardComponent = (function () {
+    function DashboardComponent(_router, _heroService) {
+        this._router = _router;
         this._heroService = _heroService;
-        this._routeParams = _routeParams;
+        this.heroes = [];
     }
-    HeroDetailComponent.prototype.ngOnInit = function () {
+    DashboardComponent.prototype.ngOnInit = function () {
         var _this = this;
-        var id = +this._routeParams.get('id');
-        this._heroService.getHero(id)
-            .then(function (hero) { return _this.hero = hero; });
+        this._heroService.getHeroes()
+            .then(function (heroes) { return _this.heroes = heroes.slice(1, 5); });
     };
-    HeroDetailComponent.prototype.goBack = function () {
-        window.history.back();
+    DashboardComponent.prototype.gotoDetail = function (hero) {
+        var link = ['HeroDetail', { id: hero.id }];
+        this._router.navigate(link);
     };
-    HeroDetailComponent = __decorate([
+    DashboardComponent = __decorate([
         core_1.Component({
-            selector: 'my-hero-detail',
-            templateUrl: 'app/hero-detail.template.html'
+            selector: 'my-dashboard',
+            templateUrl: 'app/dashboard.template.html',
+            styleUrls: ['app/dashboard.template.css']
         }), 
-        __metadata('design:paramtypes', [hero_service_1.HeroService, router_deprecated_1.RouteParams])
-    ], HeroDetailComponent);
-    return HeroDetailComponent;
+        __metadata('design:paramtypes', [router_deprecated_1.Router, hero_service_1.HeroService])
+    ], DashboardComponent);
+    return DashboardComponent;
 }());
-exports.HeroDetailComponent = HeroDetailComponent;
-//# sourceMappingURL=hero-detail.component.js.map
+exports.DashboardComponent = DashboardComponent;
+//# sourceMappingURL=dashboard.component.js.map
