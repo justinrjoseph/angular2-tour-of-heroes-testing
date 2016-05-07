@@ -9,8 +9,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
+var hero_service_1 = require('./hero.service');
 var HeroDetailComponent = (function () {
-    function HeroDetailComponent() {
+    function HeroDetailComponent(_heroService) {
+        this._heroService = _heroService;
     }
     __decorate([
         core_1.Input(), 
@@ -21,7 +23,7 @@ var HeroDetailComponent = (function () {
             selector: 'my-hero-detail',
             template: "\n\t\t<div *ngIf=\"hero\">\n\t\t\t<h2>{{ hero.name }} details!</h2>\n\t\t\t<div>\n\t\t\t\t<label>id: </label>{{ hero.id }}\n\t\t\t</div>\n\t\t\t<div>\n\t\t\t\t<label>name: </label>\n\t\t\t\t<input type=\"text\" [(ngModel)]=\"hero.name\" placeholder=\"name\">\n\t\t\t</div>\n\t\t</div>\n\t"
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [hero_service_1.HeroService])
     ], HeroDetailComponent);
     return HeroDetailComponent;
 }());
