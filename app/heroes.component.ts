@@ -16,6 +16,8 @@ export class HeroesComponent implements OnInit {
 	title = 'Tour of Heroes';
 	heroes: Hero[];
 	selectedHero: Hero;
+	addingHero = false;
+	error: any;
 
 	constructor(private _heroService: HeroService, private _router: Router) {}
 
@@ -24,13 +26,40 @@ export class HeroesComponent implements OnInit {
 	}
 
 	getHeroes() {
-		this._heroService.getHeroes()
-										.then(heroes => this.heroes = heroes);
+		this._heroService
+				.getHeroes()
+				.then(heroes => this.heroes = heroes)
+				.catch(error => this.error = error); // TODO: Display error message
 	}
 
-	onSelect(hero: Hero) { this.selectedHero = hero; }
+	onSelect(hero: Hero) {
+		this.selectedHero = hero;
+		this.addingHero = false;
+	}
 
 	gotoDetail() {
 		this._router.navigate(['HeroDetail', { id: this.selectedHero.id }])
+	}
+
+	close(savedHero: Hero) {
+		this.addingHero = false;
+		if ( savedHero ) { this.getHeroes(); }
+	}
+
+	addHero() {
+		this.addingHero = true;
+		this.selectedHero = null;
+	}
+
+	delete(hero: Hero, event: any) {
+		event.stopPropagation();
+
+		this._heroService
+				.delete(hero)
+				.then(res => {
+					this.heroes = this.heroes.filter(h => h !== hero);
+					if ( this.selectedHero === hero ) { this.selectedHero = null; }
+				})
+				.catch(error => this.error = error); // TODO: Display error message
 	}
 }

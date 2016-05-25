@@ -10,21 +10,49 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var router_deprecated_1 = require('@angular/router-deprecated');
+var hero_1 = require('./hero');
 var hero_service_1 = require('./hero.service');
 var HeroDetailComponent = (function () {
     function HeroDetailComponent(_heroService, _routeParams) {
         this._heroService = _heroService;
         this._routeParams = _routeParams;
+        this.close = new core_1.EventEmitter();
+        this.navigated = false; // true if navigated here
     }
     HeroDetailComponent.prototype.ngOnInit = function () {
         var _this = this;
-        var id = +this._routeParams.get('id');
-        this._heroService.getHero(id)
-            .then(function (hero) { return _this.hero = hero; });
+        if (this._routeParams.get('id') !== null) {
+            var id = +this._routeParams.get('id');
+            this.navigated = true;
+            this._heroService.getHero(id)
+                .then(function (hero) { return _this.hero = hero; });
+        }
+        else {
+            this.navigated = false;
+            this.hero = new hero_1.Hero();
+        }
     };
-    HeroDetailComponent.prototype.goBack = function () {
-        window.history.back();
+    HeroDetailComponent.prototype.save = function () {
+        var _this = this;
+        this._heroService
+            .save(this.hero)
+            .then(function (hero) {
+            _this.hero = hero; // saved hero, w/id if new
+            _this.goBack(hero);
+        })
+            .catch(function (error) { return _this.error = error; }); // TODO: Display error message
     };
+    HeroDetailComponent.prototype.goBack = function (savedHero) {
+        if (savedHero === void 0) { savedHero = null; }
+        this.close.emit(savedHero);
+        if (this.navigated) {
+            window.history.back();
+        }
+    };
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', Object)
+    ], HeroDetailComponent.prototype, "close", void 0);
     HeroDetailComponent = __decorate([
         core_1.Component({
             selector: 'my-hero-detail',
