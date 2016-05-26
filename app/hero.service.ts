@@ -58,7 +58,7 @@ export class HeroService {
 	// Update existing Hero
 	private put(hero: Hero) {
 		let headers = new Headers();
-		headers.append('Content-Type' : 'application/json');
+		headers.append('Content-Type', 'application/json');
 
 		let url = `${this._heroesUrl}/${hero.id}`;
 
